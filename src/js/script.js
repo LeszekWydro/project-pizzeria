@@ -92,7 +92,7 @@
         /* find active product (product that has active class) */
         const activeProduct = document.querySelector(select.all.menuProductsActive);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-        if (activeProduct == null && activeProduct == thisProduct.element) {
+        if (activeProduct !== null && activeProduct !== thisProduct.element) {
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
         } else {
         /* toggle active class on thisProduct.element */
