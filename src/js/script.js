@@ -105,6 +105,7 @@
         const activeProduct = document.querySelector(select.all.menuProductsActive);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if (activeProduct  !== null && activeProduct !== thisProduct.element) {
+          thisProduct.element.classList.add(classNames.menuProduct.wrapperActive);
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
         } else {
         /* toggle active class on thisProduct.element */
@@ -116,7 +117,7 @@
     initOrderForm(){
       const thisProduct = this;
       console.log('initOrderForm', thisProduct);
-      
+
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisProduct.processOrder();
@@ -137,6 +138,28 @@
     processOrder(){
       const thisProduct = this;
       console.log('processOrder', thisProduct );
+      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      console.log('formData', formData);
+      // set price to default price
+      let price = thisProduct.data.price;
+      // for every category (param)...
+      for(let paramId in thisProduct.data.params) {
+        // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
+        const param = thisProduct.data.params[paramId];
+        console.log(paramId, param);
+
+        // for every option in this category
+        for(let optionId in param.options) {
+          // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
+          const option = param.options[optionId];
+          console.log(optionId, option);
+        }
+      }
+
+      // update calculated price in the HTML
+      thisProduct.priceElem.innerHTML = price;
+      
     }
   }   
 
