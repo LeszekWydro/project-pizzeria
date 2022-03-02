@@ -154,13 +154,27 @@
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
           console.log(optionId, option);
+
+          if(formData[paramId] && formData[paramId].includes(optionId)) {
+            // check if the option is not default
+            if(!option.default) {
+              // add option price to price variable
+              price = price + option.price;
+            }
+          } else {
+            // check if the option is default
+            if(option.default) {
+              // reduce price variable
+              price = price - option.price;
+            }
+          }
         }
       }
-
+    
       // update calculated price in the HTML
       thisProduct.priceElem.innerHTML = price;
     }
-  }   
+  }
 
   const app = {
     initMenu: function(){
