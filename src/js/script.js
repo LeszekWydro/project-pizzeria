@@ -350,7 +350,9 @@
     announce(){
       const thisWidget = this;
 
-      const event = new Event('updated');
+      const event = new Event('updated', {
+        bubbles: true 
+      });
       thisWidget.element.dispatchEvent(event);
     }
   }
@@ -375,7 +377,7 @@
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
       thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
-      thisCart.dom.subTotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
     }
@@ -386,6 +388,9 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function(event){
         event.preventDefault();
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+        thisCart.dom.productList.addEventListener('updated', function(){
+          thisCart.update();
+        });
       });
     }
 
@@ -412,23 +417,25 @@
       thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
 
       thisCart.totalNumber = 0;
-      thisCart.subTotalPrice = 0;
+      thisCart.subtotalPrice = 0;
 
       for (thisCart.product of thisCart.products) {
         thisCart.totalNumber =+ thisCart.amount;
-        thisCart.subTotalPrice =+ thisCart.price;
+        thisCart.subtotalPrice =+ thisCart.price;
       }
 
       if (thisCart.totalNumber !== 0){
-        thisCart.totalPrice = thisCart.subTotalPrice + thisCart.deliveryFee;
+        thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
       }
       else {
         thisCart.totalNumber = 0;
-        thisCart.subTotalPrice = 0;
+        thisCart.subtotalPrice = 0;
       }
 
-      thisCart.dom.subTotalPrice.innerHTML = thisCart.subTotalPrice;
+      thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
+      thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
       thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
+      thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
 
 
     }
