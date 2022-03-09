@@ -424,17 +424,16 @@
         thisCart.subtotalPrice = thisCart.subtotalPrice + thisCart.product.price;
       }
 
-      if (thisCart.totalNumber != 0){
+      if (thisCart.totalNumber === 0){
+        thisCart.totalPrice = 0; }
+      else {
         thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
       }
-      else {
-        thisCart.totalNumber = 0;
-        thisCart.subtotalPrice = 0;
-      }
+
+      console.log ('totalprice', thisCart.totalPrice);
 
       thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice;
       thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
-
       thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
       thisCart.dom.deliveryFee.innerHTML = thisCart.deliveryFee;
     }
