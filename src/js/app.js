@@ -1,6 +1,7 @@
 import{classNames, select, settings} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
+import Booking from './components/Booking.js';
 
 
 
@@ -31,7 +32,7 @@ const app = {
         const clickedElement = this;
         event.preventDefault();
 
-        /* get pqge id from href attribute */
+        /* get page id from href attribute */
         const id = clickedElement.getAttribute('href').replace('#', '');
 
         /* run thisApp.activatePage with that id */
@@ -62,6 +63,14 @@ const app = {
     }
 
 
+  },
+
+  initBooking: function(){
+    const thisApp = this;
+
+    thisApp.bookingWidget = document.querySelector(select.containerOf.booking);
+
+    thisApp.bookingContainer = new Booking(thisApp.bookingWidget);
   },
 
   initMenu: function(){
@@ -119,6 +128,7 @@ const app = {
     thisApp.initData();
     thisApp.initCart();
     thisApp.initPages();
+    thisApp.initBooking();
   },
 };
 
