@@ -10,6 +10,8 @@ class Booking {
 
     const thisBooking = this;
 
+    thisBooking.selectedTable = [];
+
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
@@ -151,6 +153,72 @@ class Booking {
     }
   }
  
+  initTables(event){
+    const thisBooking = this;
+    const clickedElement = event.target;
+
+    if(clickedElement.classList.contains(classNames.booking.table) &&
+      !clickedElement.classList.contains(classNames.booking.tableBooked)){
+      clickedElement.classList.toggle(classNames.booking.tableSelected);
+
+      const tableId = event.target.getAttribute(settings.booking.tableIdAttribute);
+      thisBooking.selectedTable = tableId;
+    }
+    
+    for(let table of thisBooking.dom.tables){
+      if(table !== clickedElement){
+        table.classList.remove(classNames.booking.tableSelected);
+      }
+    }
+    if(clickedElement.classList.contains(classNames.booking.tableBooked)){
+      alert('Stolik zarezerwowany.');
+    }
+    for(let table of thisBooking.dom.tables){
+      if(!table.classList.contains(classNames.booking.tableSelected)){
+        table.classList.remove(classNames.booking.tableSelected);
+      }
+    }
+  }
+
+
+  sendBooking(){
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.bookings;
+
+    const payload = {
+
+      date: thisBooking.datePickerWidget.value,
+      hour: thisBooking.hourPickerWidget.value,
+      table: thisBooking.selectedTable,
+      ppl: thisBooking.peopleAmountWidget.value,
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
+    };
+
+    for (let starter of thisBooking.dom.starters){
+      if(starter.checked){
+        payload.starters.push(starter.value);
+      }
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+      
+    fetch(url, options)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (parsedResponse) {
+        console.log('parsedResponse', parsedResponse);
+      });
+  }
+
   render(element){
     const thisBooking = this;
 
@@ -164,6 +232,11 @@ class Booking {
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+    thisBooking.dom.floorPlan = document.querySelector(select.booking.floorPlan);
+    thisBooking.dom.orderConfirmation = document.querySelector(select.booking.bookButton);
+    thisBooking.dom.phone = document.querySelector(select.booking.phoneNumber);
+    thisBooking.dom.address = document.querySelector(select.booking.address);
+    thisBooking.dom.starters = document.querySelectorAll(select.booking.starters);
   }
 
   initWidgets(){
@@ -191,11 +264,23 @@ class Booking {
     thisBooking.dom.hourPicker.addEventListener('updated', function(event){
       event.preventDefault();
     });
-    
+
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
     });
-   
+
+    thisBooking.dom.floorPlan.addEventListener('click', function(event){
+      thisBooking.initTables(event);
+    });
+
+    thisBooking.dom.wrapper.addEventListener('updated', function(){
+      thisBooking.updateDOM();
+    });
+
+    thisBooking.dom.orderConfirmation.addEventListener('click', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+    });
   }
 }
 

@@ -173,6 +173,12 @@
       }
     }
 
+    &.selected {
+      border-style: dashed;
+      border-color: black;
+      background-color: #adfaad;
+    }
+
     &.booked {
       cursor: not-allowed;
       color: lighten($color-dark, 40%);
