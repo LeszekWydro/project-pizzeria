@@ -1,6 +1,6 @@
 import{settings, classNames, select, templates} from '../settings.js';
 import CartProduct from './CartProduct.js';
-import{utils} from '../utils.js';
+import {utils} from '../utils.js';
 
 class Cart{
   constructor(element){
@@ -28,7 +28,7 @@ class Cart{
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
     thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
     thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
-    console.log('totalPrice', thisCart.dom.totalPrice);
+    // console.log('totalPrice', thisCart.dom.totalPrice);
   }
     
 
