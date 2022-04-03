@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {templates, select, classNames} from '../settings.js';
 
 
@@ -57,7 +58,6 @@ class Home{
   initWidget(){
     const thisHome = this;
 
-    // eslint-disable-next-line no-undef
     thisHome.flickityWidget = new Flickity(thisHome.dom.carousel,{
       cellAlign: 'left',
       contains: true,
