@@ -1,9 +1,8 @@
 import{classNames, select, settings} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
+import Home from './components/Home.js';
 import Booking from './components/Booking.js';
-
-
 
 
 const app = {
@@ -24,7 +23,6 @@ const app = {
       }
     }
 
-  
     thisApp.activatePage(pageMatchingHash);
 
     for (let link of thisApp.navLinks){
@@ -53,7 +51,6 @@ const app = {
     for (let page of thisApp.pages){
       page.classList.toggle(classNames.pages.active, page.id == pageId);
     }
-
     /* add class active to matching page, remove from non-matching */
     for (let link of thisApp.navLinks){
       link.classList.toggle(
@@ -61,7 +58,14 @@ const app = {
         link.getAttribute('href') == '#' + pageId
       );
     }
+  },
 
+  initHome: function(){
+    const thisApp = this;
+
+    thisApp.homeWrapper = document.querySelector(select.containerOf.home);
+    
+    thisApp.homeContainer = new Home(thisApp.homeWrapper);
 
   },
 
@@ -120,15 +124,15 @@ const app = {
     });
   },
     
-
   init: function(){
     const thisApp = this;
-    // console.log('*** App starting ***');
   
     thisApp.initData();
     thisApp.initCart();
     thisApp.initPages();
+    thisApp.initHome();
     thisApp.initBooking();
+    
   },
 };
 
