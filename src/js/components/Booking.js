@@ -140,7 +140,9 @@ class Booking {
       if(!isNaN(tableID)){
         tableID = parseInt(tableID);  
       }
-
+      console.log('thisBooking.booked[thisBooking.date][thisBooking.hour]',thisBooking.booked[thisBooking.date][thisBooking.hour]);
+      console.log('thisBookingD', thisBooking.date);
+      console.log('hour', thisBooking.hour);
       if(
         !allAvailable
         &&
@@ -150,6 +152,9 @@ class Booking {
       } else {
         table.classList.remove(classNames.booking.tableBooked);
       }
+    }
+    for(let table of thisBooking.dom.tables){
+      table.classList.remove(classNames.booking.tableSelected);
     }
   }
  
@@ -180,25 +185,31 @@ class Booking {
     }
   }
 
-
   sendBooking(){
     const thisBooking = this;
     const url = settings.db.url + '/' + settings.db.bookings;
 
     const payload = {
 
+
       date: thisBooking.datePickerWidget.value,
       hour: thisBooking.hourPickerWidget.value,
-      table: thisBooking.selectedTable,
+      table: parseInt(thisBooking.selectedTable),
+      duration: thisBooking.hoursAmountWidget.value,
       ppl: thisBooking.peopleAmountWidget.value,
       starters: [],
       phone: thisBooking.dom.phone.value,
       address: thisBooking.dom.address.value,
+
     };
+    console.log('payload', payload);
 
     for (let starter of thisBooking.dom.starters){
       if(starter.checked){
         payload.starters.push(starter.value);
+        if (starter.value === 'bread' && !payload.starters.includes('water')){
+          payload.starters.push('water');
+        }
       }
     }
 
@@ -207,15 +218,17 @@ class Booking {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     };
-      
+
+
     fetch(url, options)
       .then(function (response) {
         return response.json();
       })
-      .then(function (parsedResponse) {
-        console.log('parsedResponse', parsedResponse);
+      .then(function() {
+        thisBooking.makeBooked(payload.date,payload.hour, payload.duration,payload.table);
+        thisBooking.updateDOM();
       });
   }
 
@@ -273,6 +286,8 @@ class Booking {
       thisBooking.initTables(event);
     });
 
+
+    // dodano table.classList.remove
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
     });

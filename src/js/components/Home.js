@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import {templates, select, classNames} from '../settings.js';
 
 
@@ -23,21 +23,23 @@ class Home{
   }
 
   activatePage(pageId){
-
     const thisHome = this;
 
     thisHome.pages = document.querySelector(select.containerOf.pages).children;
     thisHome.navLinks = document.querySelectorAll(select.nav.links);
 
-    
     for (let page of thisHome.pages){
       page.classList.toggle(classNames.pages.active, page.id == pageId);
     }
 
+
+    // dodano przecinek zamiast kropki
+    
     for (let link of thisHome.navLinks){
-      link.classList.toggle(classNames.nav.active.link.getAttribute('href') == '#' + pageId);
+      link.classList.toggle(classNames.nav.active,
+        link.getAttribute('href') == '#' + pageId);
     }
-  } 
+  }
 
   initLinks(){
     const thisHome = this;
@@ -58,13 +60,16 @@ class Home{
   initWidget(){
     const thisHome = this;
 
+
     thisHome.flickityWidget = new Flickity(thisHome.dom.carousel,{
       cellAlign: 'left',
       contains: true,
       autoPlay: 1800,
       freeScroll: true,
       wrapAround: true,
+      prevNextButtons: false,
     });
   }
+  
 }
 export default Home;
